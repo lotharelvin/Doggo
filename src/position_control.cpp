@@ -297,6 +297,7 @@ void CoupledMoveLeg(ODriveArduino& odrive, float t, struct GaitParams params,
     float y;
     SinTrajectory(t, params, gait_offset, x, y);
     CartesianToThetaGamma(x, y, leg_direction, theta, gamma);
+    Serial<<x<<'\t'<<y<<'\t'<<theta<<'\t'<<gamma<<'\n';
     odrive.SetCoupledPosition(theta, gamma, gains);
 }
 
