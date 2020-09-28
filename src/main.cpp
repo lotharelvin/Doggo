@@ -111,9 +111,6 @@ void chSetup() {
     chThdCreateStatic(waPrintDebugThread, sizeof(waPrintDebugThread),
         NORMALPRIO, PrintDebugThread, NULL);
 
-    // Blink thread: blinks the onboard LED
-    chThdCreateStatic(waBlinkThread, sizeof(waBlinkThread),
-        NORMALPRIO, BlinkThread, NULL);
 
     // Datalog Thread: logs IMU data
     chThdCreateStatic(waDatalogThread, sizeof(waDatalogThread),
@@ -122,6 +119,11 @@ void chSetup() {
     // IMU Thread: Queries IMU and stores data
     chThdCreateStatic(waIMUThread, sizeof(waIMUThread),
         NORMALPRIO, IMUThread, NULL);
+
+    // Blink thread: blinks the onboard LED
+    chThdCreateStatic(waBlinkThread, sizeof(waBlinkThread),
+                      NORMALPRIO, BlinkThread, NULL);
+
 }
 //------------------------------------------------------------------------------
 // Setup thread.
