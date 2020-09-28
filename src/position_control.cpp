@@ -34,7 +34,7 @@ THD_FUNCTION(PositionControlThread, arg) {
         switch(state) {
             case STOP:
                 {
-                    LegGain stop_gain = {50, 0.5, 50, 0.5};
+                    LegGain stop_gain = {70, 0.5, 70, 0.5};
                     float y1 = 0.15;
                     float y2 = 0.15;
                     float theta1, gamma1, theta2, gamma2;
