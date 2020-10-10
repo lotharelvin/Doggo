@@ -97,7 +97,7 @@ THD_FUNCTION(PositionControlThread, arg) {
 long rotate_start = 0; // milliseconds when rotate was commanded
 States state = STOP;
 
-// {stance_height, down_AMP, up_AMP, flight_percent (proportion), step_length, FREQ}
+// {stance_height, down_AMP, up_AMP, flight_percent (proportion), step_length, FREQ,step-difference}
 struct GaitParams state_gait_params[] = {
     //{s.h, d.a., u.a., f.p., s.l., fr., s.d.}
     {NAN, NAN, NAN, NAN, NAN, NAN, NAN}, // STOP
@@ -297,7 +297,7 @@ void CoupledMoveLeg(ODriveArduino& odrive, float t, struct GaitParams params,
     float y;
     SinTrajectory(t, params, gait_offset, x, y);
     CartesianToThetaGamma(x, y, leg_direction, theta, gamma);
-    Serial<<x<<'\t'<<y<<'\t'<<theta<<'\t'<<gamma<<'\n';
+    //Serial<<x<<'\t'<<y<<'\t'<<theta<<'\t'<<gamma<<'\n';
     odrive.SetCoupledPosition(theta, gamma, gains);
 }
 
@@ -320,7 +320,6 @@ void gait(struct GaitParams params,
     const float leg0_direction = -1.0;
     CoupledMoveLeg(odrv0Interface, t, paramsL, leg0_offset, leg0_direction, gains,
         global_debug_values.odrv0.sp_theta, global_debug_values.odrv0.sp_gamma);
-
     const float leg1_direction = -1.0;
     CoupledMoveLeg(odrv1Interface, t, paramsL, leg1_offset, leg1_direction, gains,
         global_debug_values.odrv1.sp_theta, global_debug_values.odrv1.sp_gamma);
