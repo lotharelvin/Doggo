@@ -50,6 +50,9 @@ struct ODrive {
 
 struct IMU {
     float yaw, pitch, roll; // Euler angles for robot body
+    //oyyk modified
+    float step_length_revisement=0;
+    //oyyk modified end
 };
 
 // Struct to hold information helpful for debugging/printing to serial monitor
@@ -58,6 +61,7 @@ struct DebugValues {
     long position_reply_time;
     struct ODrive odrv0, odrv1, odrv2, odrv3;
     struct IMU imu;
+
 };
 
 extern struct DebugValues global_debug_values;

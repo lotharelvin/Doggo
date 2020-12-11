@@ -34,7 +34,7 @@ THD_FUNCTION(PositionControlThread, arg) {
         switch(state) {
             case STOP:
                 {
-                    LegGain stop_gain = {70, 0.5, 70, 0.5};
+                    LegGain stop_gain = {50, 0.5, 50, 0.5};
                     float y1 = 0.15;
                     float y2 = 0.15;
                     float theta1, gamma1, theta2, gamma2;
@@ -101,7 +101,7 @@ States state = STOP;
 struct GaitParams state_gait_params[] = {
     //{s.h, d.a., u.a., f.p., s.l., fr., s.d.}
     {NAN, NAN, NAN, NAN, NAN, NAN, NAN}, // STOP
-    {0.17, 0.04, 0.06, 0.35, 0.15, 2.0, 0.0}, // TROT
+    {0.17, 0.04, 0.06, 0.35, 0.1, 2.0, 0.0}, // TROT
     {0.17, 0.04, 0.06, 0.35, 0.0, 2.0, 0.0}, // BOUND
     {0.15, 0.00, 0.06, 0.25, 0.0, 1.5, 0.0}, // WALK
     {0.12, 0.05, 0.0, 0.75, 0.0, 1.0, 0.0}, // PRONK
@@ -307,9 +307,10 @@ void gait(struct GaitParams params,
 
     struct GaitParams paramsR = params;
     struct GaitParams paramsL = params;
-    paramsR.step_length -= params.step_diff;
-    paramsL.step_length += params.step_diff;
-
+    paramsR.step_length -=state==TROT? (params.step_diff+global_debug_values.imu.step_length_revisement):params.step_diff;
+    paramsL.step_length +=state==TROT? (params.step_diff+global_debug_values.imu.step_length_revisement):params.step_diff;
+    Serial<<"left_length "<<paramsL.step_length<<"\n";
+    Serial<<"right_length "<<paramsR.step_length<<"\n";
     if (!IsValidGaitParams(paramsR) || !IsValidGaitParams(paramsL) || !IsValidLegGain(gains)) {
         return;
     }

@@ -19,10 +19,11 @@ THD_FUNCTION(IMUThread, arg) {
 
     //Initialize IMU
     int polling_period = 1000.0/IMU_SEND_FREQ;
-    if(!bno080_imu.beginSPI(SPI_CS_PIN, SPI_WAK_PIN, SPI_INTPIN, SPI_RSTPIN)) {
+    while(!bno080_imu.beginSPI(SPI_CS_PIN, SPI_WAK_PIN, SPI_INTPIN, SPI_RSTPIN)) {
         Serial.println("IMU beginSPI failed (non-fatal)...");
         // return;
     }
+    Serial<<"IMU opened"<<"\n";
     bno080_imu.enableGyro(polling_period);
 
     // Enable accelerometer according to config
@@ -41,7 +42,16 @@ THD_FUNCTION(IMUThread, arg) {
     float pitch_acc = 0;
     float prev_pitch_acc = 0;
     float rotations = 0;
+    //oyyk modified
+    float angle_xy_estimate=0;
+    float prev_xy_estimate=0;
+    float accu_xy_estimate=0;
+    float angular_xy_velocity=0;
 
+    float Ki_xy_angular=0;
+    float Kp_xy_angular=(180/M_PI)*0.001;//每向左偏10度角，step_diff增加0.01m，即revisement=0.01
+    float Kd_xy_angular=(180/M_PI)*0.001;
+    //oyyk modified end
     float velocity_x = 0;
 
     // The BNO080 will be sending both gyro and accel readings every poll period.
@@ -107,13 +117,23 @@ THD_FUNCTION(IMUThread, arg) {
                 } else {
                     float gyroY = bno080_imu.getGyroY();
                     raw_integrated_gyro_y -= gyroY / (float)IMU_SEND_FREQ;
+                    //oyyk modified
+                    angular_xy_velocity=bno080_imu.getGyroZ();
+                    angle_xy_estimate+=angular_xy_velocity/(float)IMU_SEND_FREQ; //向左偏转的角度
+                    accu_xy_estimate+=angle_xy_estimate-prev_xy_estimate;
+                    global_debug_values.imu.step_length_revisement= Kp_xy_angular*angle_xy_estimate + Kd_xy_angular*(angle_xy_estimate-prev_xy_estimate) + Ki_xy_angular*accu_xy_estimate;
+                    
+                    //oyyk modified end
                     long imu_calc_done_ts = micros();
-
+                    
                     if (IMU_VERBOSE > 0) {
-                        Serial << raw_integrated_gyro_y << "\n";
+                        //Serial << raw_integrated_gyro_y << "\n";
+                        Serial<<"current angle(x_y plane)   "<<angle_xy_estimate<<"\n";
+                        Serial<<"Step_diff revisement "<<global_debug_values.imu.step_length_revisement<<"\n";
 
                     }
                     if (IMU_VERBOSE > 1) {
+
                         Serial << "uS spent reading IMU: " << read_finished_ts - read_begin_ts << "\n";
                         Serial << "uS total time for IMU: " << imu_calc_done_ts - read_begin_ts << "\n";
                     }

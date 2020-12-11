@@ -22,14 +22,14 @@ THD_FUNCTION(PrintDebugThread, arg) {
         if (enable_debug) {
             // Print leg positions
             PrintODriveDebugInfo(global_debug_values.odrv0);
-            Serial << '\t';
+            Serial << '\n';
             PrintODriveDebugInfo(global_debug_values.odrv1);
-            Serial << '\t';
+            Serial << '\n';
             PrintODriveDebugInfo(global_debug_values.odrv2);
-            Serial << '\t';
+            Serial << '\n';
             PrintODriveDebugInfo(global_debug_values.odrv3);
-            Serial << '\t';
-            Serial << global_debug_values.imu.pitch;
+            Serial << '\n';
+            //Serial << global_debug_values.imu.pitch;
             Serial.println();
         }
 

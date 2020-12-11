@@ -25,7 +25,7 @@
 // XBEE Config
 // Define USE_XBEE to cause all debug prints to go through the xbee
 // Comment out the line to debug over usb
-#define USE_XBEE
+//#define USE_XBEE
 
 // Xbee serial
 #ifdef USE_XBEE
@@ -39,7 +39,7 @@
 #define IMU_COMPLEMENTARY_FILTER_TAU 0.95f
 
 // Set above 0 to print imu debug messages
-#define IMU_VERBOSE 0
+#define IMU_VERBOSE 1
 
 // Pins for BNO080 IMU
 #define SPI_CS_PIN 15
