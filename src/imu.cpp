@@ -43,11 +43,8 @@ THD_FUNCTION(IMUThread, arg) {
     float prev_pitch_acc = 0;
     float rotations = 0;
     //oyyk modified
-    float angle_xy_estimate=0;
-    float prev_xy_estimate=0;
-    float accu_xy_estimate=0;
-    float angular_xy_velocity=0;
 
+    float angular_xy_velocity=0;
     float Ki_xy_angular=0;
     float Kp_xy_angular=(180/M_PI)*0.001;//每向左偏10度角，step_diff增加0.01m，即revisement=0.01
     float Kd_xy_angular=(180/M_PI)*0.001;
@@ -119,10 +116,11 @@ THD_FUNCTION(IMUThread, arg) {
                     raw_integrated_gyro_y -= gyroY / (float)IMU_SEND_FREQ;
                     //oyyk modified
                     angular_xy_velocity=bno080_imu.getGyroZ();
-                    angle_xy_estimate+=angular_xy_velocity/(float)IMU_SEND_FREQ; //向左偏转的角度
-                    accu_xy_estimate+=angle_xy_estimate-prev_xy_estimate;
-                    global_debug_values.imu.step_length_revisement= Kp_xy_angular*angle_xy_estimate + Kd_xy_angular*(angle_xy_estimate-prev_xy_estimate) + Ki_xy_angular*accu_xy_estimate;
+                    global_debug_values.imu.angle_xy_estimate+=angular_xy_velocity/(float)IMU_SEND_FREQ; //向左偏转的角度
+                    global_debug_values.imu.accu_xy_estimate+=angle_xy_estimate-prev_xy_estimate;
                     
+                    global_debug_values.imu.step_length_revisement= Kp_xy_angular*global_debug_values.imu.angle_xy_estimate + Kd_xy_angular*(global_debug_values.imu.angle_xy_estimate-global_debug_values.imu.prev_xy_estimate) + Ki_xy_angular*global_debug_values.imu.accu_xy_estimate;
+                    global_debug_values.imu.accu_xy_estimate=global_debug_values.imu.angle_xy_estimate;
                     //oyyk modified end
                     long imu_calc_done_ts = micros();
                     

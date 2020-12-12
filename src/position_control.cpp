@@ -436,6 +436,13 @@ void TransitionToWalk() {
 */
 void TransitionToTrot() {
     state = TROT;
+    //oyyk modified
+    global_debug_values.imu.step_length_revisement=0;
+    global_debug_values.imu.angle_xy_estimate=0;
+    global_debug_values.imu.prev_xy_estimate=0;
+    global_debug_values.imu. accu_xy_estimate=0;
+    //TO reset the straight when transition to trot
+    //oyyk midified ends
     Serial.println("TROT");
     //            {s.h, d.a., u.a., f.p., s.l., fr.}
     //gait_params = {0.17, 0.04, 0.06, 0.35, 0.15, 2.0};

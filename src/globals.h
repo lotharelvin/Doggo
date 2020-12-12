@@ -52,6 +52,11 @@ struct IMU {
     float yaw, pitch, roll; // Euler angles for robot body
     //oyyk modified
     float step_length_revisement=0;
+    
+    float angle_xy_estimate=0;
+    float prev_xy_estimate=0;
+    float accu_xy_estimate=0;
+    
     //oyyk modified end
 };
 
