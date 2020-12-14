@@ -60,12 +60,31 @@ struct IMU {
     //oyyk modified end
 };
 
+//oyyk modified
+struct Force_Sensor_Params{
+    bool Onland0=true;
+    bool Onland1=true;
+    bool Onland2=true;
+    bool Onland3=true;
+    
+    float Force_vertical0=0.00;
+    float Force_vertical1=0.00;
+    float Force_vertical2=0.00;
+    float Force_vertical3=0.00;
+    
+    float Xdirect_revisement0=0.00;
+    float Xdirect_revisement1=0.00;
+    float Xdirect_revisement2=0.00;
+    float Xdirect_revisement3=0.00;
+};
+//oyyk modified end
 // Struct to hold information helpful for debugging/printing to serial monitor
 struct DebugValues {
     float t;
     long position_reply_time;
     struct ODrive odrv0, odrv1, odrv2, odrv3;
     struct IMU imu;
+    struct Force_Sensor_Params Fsensor;
 
 };
 

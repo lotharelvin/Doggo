@@ -50,3 +50,9 @@ Use a serial monitor (we use the Arduino one) to send over these commands to Dog
 
 ### Using a joystick controller
 We have implemented basic support for controlling the robot from a Playstation dual shock controller. To use the controller, we actually use the same firmware, and instead add a program on the host computer's side that reads joystick values and sends the appropriate trot, stop, etc commands to the robot using the text-based XBee serial interface. You can find the code here: https://github.com/stanfordroboticsclub/DoggoCommand
+
+### Our modification
+
+Currently, we've used GND beside the USB port, Vin , 01as UART0, 9 10 asUART1, 78 as UART2, 3132 as UART3,14-17 and 11-13 to connect IMU, 33 34 to connect xbee.
+
+Now we want to add four force sensors for each leg, we first choose pin 20-23 for leg0 to leg 3.
