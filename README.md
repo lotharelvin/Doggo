@@ -56,3 +56,13 @@ We have implemented basic support for controlling the robot from a Playstation d
 Currently, we've used GND beside the USB port, Vin , 01as UART0, 9 10 asUART1, 78 as UART2, 3132 as UART3,14-17 and 11-13 to connect IMU, 33 34 to connect xbee.
 
 Now we want to add four force sensors for each leg, we first choose pin 20-23 for leg0 to leg 3.
+
+#### Force Sensors
+
+Teensy analoginput will map input voltage between 0 and 3.3V to 0 - 1023
+
+
+
+eg.   float data=analogread()
+
+​		float voltage=data/1024 * 3.3;
