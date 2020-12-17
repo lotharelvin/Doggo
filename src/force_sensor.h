@@ -1,11 +1,10 @@
-#ifndef GLOBALS_H
-#define GLOBALS_H
-#include "cppQueue.h"
+#ifndef FORCE_SENSOR_H
+#define FORCE_SENSOR_H
 #include "globals.h"
 #include "config.h"
 #include "ChRt.h"
 #include "Arduino.h"
-
+#include <queue>
 
 extern THD_WORKING_AREA(waForcesensorThread,2048);
 extern THD_FUNCTION(ForcesensorThread,arg);
