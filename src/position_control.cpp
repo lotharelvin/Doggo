@@ -1,11 +1,12 @@
 #include "position_control.h"
 #include "Arduino.h"
 #include "ODriveArduino.h"
-#include "config.h"
 #include "globals.h"
+#include "config.h"
 #include "jump.h"
 #include <math.h>
 #include "backflip.h"
+#include "force_sensor.h"
 
 //------------------------------------------------------------------------------
 // PositionControlThread: Motor position control thread
@@ -305,32 +306,44 @@ void gait(struct GaitParams params,
                 float leg2_offset, float leg3_offset,
                 struct LegGain gains) {
 
-    struct GaitParams paramsR = params;
-    struct GaitParams paramsL = params;
-    paramsR.step_length -=state==TROT? (params.step_diff+global_debug_values.imu.step_length_revisement):params.step_diff;
-    paramsL.step_length +=state==TROT? (params.step_diff+global_debug_values.imu.step_length_revisement):params.step_diff;
-    Serial<<"left_length "<<paramsL.step_length<<"\n";
-    Serial<<"right_length "<<paramsR.step_length<<"\n";
-    if (!IsValidGaitParams(paramsR) || !IsValidGaitParams(paramsL) || !IsValidLegGain(gains)) {
+    struct GaitParams params0 = params;
+    struct GaitParams params1 = params;
+    struct GaitParams params2 = params;
+    struct GaitParams params3 = params;
+    
+    FS0S.GetAvgForce();
+    //params0.down_amp+=FS0S.GetYdirect_revisement();
+    //params1.down_amp+=FS1S.GetYdirect_revisement();
+    //params2.down_amp+=FS2S.GetYdirect_revisement();
+    //params3.down_amp+=FS3S.GetYdirect_revisement();
+    
+    params2.step_length -=state==TROT? (params.step_diff+global_debug_values.imu.step_length_revisement):params.step_diff;
+    params3.step_length -=state==TROT? (params.step_diff+global_debug_values.imu.step_length_revisement):params.step_diff;
+    params0.step_length +=state==TROT? (params.step_diff+global_debug_values.imu.step_length_revisement):params.step_diff;
+    params1.step_length +=state==TROT? (params.step_diff+global_debug_values.imu.step_length_revisement):params.step_diff;
+    //Serial<<"left_length "<<paramsL.step_length<<"\n";
+    //Serial<<"right_length "<<paramsR.step_length<<"\n";
+    
+    if (!IsValidGaitParams(params0) || !IsValidGaitParams(params1) || !IsValidGaitParams(params2) || !IsValidGaitParams(params3) || !IsValidLegGain(gains)) {
         return;
     }
 
     float t = millis()/1000.0;
 
     const float leg0_direction = -1.0;
-    CoupledMoveLeg(odrv0Interface, t, paramsL, leg0_offset, leg0_direction, gains,
+    CoupledMoveLeg(odrv0Interface, t, params0, leg0_offset, leg0_direction, gains,
         global_debug_values.odrv0.sp_theta, global_debug_values.odrv0.sp_gamma);
 
     const float leg1_direction = -1.0;
-    CoupledMoveLeg(odrv1Interface, t, paramsL, leg1_offset, leg1_direction, gains,
+    CoupledMoveLeg(odrv1Interface, t, params1, leg1_offset, leg1_direction, gains,
         global_debug_values.odrv1.sp_theta, global_debug_values.odrv1.sp_gamma);
 
     const float leg2_direction = 1.0;
-    CoupledMoveLeg(odrv2Interface, t, paramsR, leg2_offset, leg2_direction, gains,
+    CoupledMoveLeg(odrv2Interface, t, params2, leg2_offset, leg2_direction, gains,
         global_debug_values.odrv2.sp_theta, global_debug_values.odrv2.sp_gamma);
 
     const float leg3_direction = 1.0;
-    CoupledMoveLeg(odrv3Interface, t, paramsR, leg3_offset, leg3_direction, gains,
+    CoupledMoveLeg(odrv3Interface, t, params3, leg3_offset, leg3_direction, gains,
         global_debug_values.odrv3.sp_theta, global_debug_values.odrv3.sp_gamma);
 }
 
@@ -440,7 +453,7 @@ void TransitionToTrot() {
     global_debug_values.imu.step_length_revisement=0;
     global_debug_values.imu.angle_xy_estimate=0;
     global_debug_values.imu.prev_xy_estimate=0;
-    global_debug_values.imu. accu_xy_estimate=0;
+    global_debug_values.imu.accu_xy_estimate=0;
     //TO reset the straight when transition to trot
     //oyyk midified ends
     Serial.println("TROT");

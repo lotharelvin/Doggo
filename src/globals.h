@@ -1,6 +1,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+#include "force_sensor.h"
 #include "ODriveArduino.h"
 
 //------------------------------------------------------------------------------
@@ -60,7 +61,12 @@ struct IMU {
     //oyyk modified end
 };
 
-
+//oyykmodified
+struct FSensor_params{
+    float K=0.00;
+};
+//oyyk modified end
+extern FSensor_params FSensorparams;
 // Struct to hold information helpful for debugging/printing to serial monitor
 struct DebugValues {
     float t;
@@ -71,7 +77,7 @@ struct DebugValues {
 };
 
 extern struct DebugValues global_debug_values;
-
+extern ForceSensor FS0S,FS1S,FS2S,FS3S;
 extern bool enable_debug;
-
+extern bool SensorDebug;
 #endif
