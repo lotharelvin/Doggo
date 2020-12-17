@@ -16,7 +16,7 @@
 #define DATALOG_FREQ 10
 #define IMU_FREQ 400
 #define IMU_SEND_FREQ 100
-
+#define FSensor_FREQ 500
 //------------------------------------------------------------------------------
 // Robot Safety Parameters
 #define CURRENT_LIM 50.0f
@@ -55,4 +55,10 @@
 // Set above 0 to print debugging messages
 #define DATALOGGER_VERBOSE 0
 
+//oyyk modified
+#define Fsensor0pin 20
+#define Fsensor1pin 21
+#define Fsensor2pin 22
+#define Fsensor3pin 23
+//oyyk modified end
 #endif
