@@ -16,7 +16,7 @@
 #define DATALOG_FREQ 10
 #define IMU_FREQ 400
 #define IMU_SEND_FREQ 100
-#define FSensor_FREQ 500
+#define FSensor_FREQ 100
 //------------------------------------------------------------------------------
 // Robot Safety Parameters
 #define CURRENT_LIM 50.0f

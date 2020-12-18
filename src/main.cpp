@@ -110,7 +110,11 @@ void chSetup() {
     // Debug thread: prints out helpful debugging information to serial monitor
     chThdCreateStatic(waPrintDebugThread, sizeof(waPrintDebugThread),
         NORMALPRIO, PrintDebugThread, NULL);
-
+    
+    //Force sensor thread:use our force sensor
+    chThdCreateStatic(waForcesensorThread,sizeof(waForcesensorThread),NORMALPRIO,ForcesensorThread,NULL);
+    
+    
     // Blink thread: blinks the onboard LED
     chThdCreateStatic(waBlinkThread, sizeof(waBlinkThread),
         NORMALPRIO, BlinkThread, NULL);

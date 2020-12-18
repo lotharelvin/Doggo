@@ -63,7 +63,7 @@ struct IMU {
 
 //oyykmodified
 struct FSensor_params{
-    float K=0.00;
+    float K=1;
 };
 //oyyk modified end
 extern FSensor_params FSensorparams;

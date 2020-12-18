@@ -21,7 +21,7 @@ THD_FUNCTION(IMUThread, arg) {
 
     //Initialize IMU
     int polling_period = 1000.0/IMU_SEND_FREQ;
-    while(!bno080_imu.beginSPI(SPI_CS_PIN, SPI_WAK_PIN, SPI_INTPIN, SPI_RSTPIN)) {
+    if(!bno080_imu.beginSPI(SPI_CS_PIN, SPI_WAK_PIN, SPI_INTPIN, SPI_RSTPIN)) {
         Serial.println("IMU beginSPI failed (non-fatal)...");
         // return;
     }
