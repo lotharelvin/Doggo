@@ -42,6 +42,16 @@ THD_FUNCTION(PositionControlThread, arg) {
                     CartesianToThetaGamma(0.0, y1, 1, theta1, gamma1);
                     CartesianToThetaGamma(0.0, y2, 1, theta2, gamma2);
 
+                    global_debug_values.odrv0.sp_theta=theta2;
+                    global_debug_values.odrv1.sp_theta=theta1;
+                    global_debug_values.odrv2.sp_theta=theta1;
+                    global_debug_values.odrv3.sp_theta=theta2;
+                    
+                    global_debug_values.odrv0.sp_gamma=gamma2;
+                    global_debug_values.odrv1.sp_gamma=gamma1;
+                    global_debug_values.odrv2.sp_gamma=gamma1;
+                    global_debug_values.odrv3.sp_gamma=gamma2;
+                    
                     odrv0Interface.SetCoupledPosition(theta2, gamma2, stop_gain);
                     odrv1Interface.SetCoupledPosition(theta1, gamma1, stop_gain);
                     odrv2Interface.SetCoupledPosition(theta1, gamma1, stop_gain);
